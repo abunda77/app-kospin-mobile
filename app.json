@@ -1,42 +1,58 @@
 {
   "expo": {
-    "name": "app-kospin-clean",
-    "slug": "app-kospin-clean",
-    "version": "1.0.0",
+    "name": "Sinara Pos",
+    "slug": "sinara-pos",
+    "version": "0.0.2",
+    "sdkVersion": "53.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
-    "scheme": "appkospinclean",
+    "icon": "./assets/images/logo_icon_mobile_300.png",
+    "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "experiments": {
+      "typedRoutes": true
+    },
+    "splash": {
+      "image": "./assets/images/logo_mobile_300.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0066AE"
+    },
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/logo_mobile_1024.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "package": "com.abunda.poskospin"
     },
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/favicon-32x32.png"
     },
     "plugins": [
       "expo-router",
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash-icon.png",
-          "imageWidth": 200,
-          "resizeMode": "contain",
-          "backgroundColor": "#ffffff"
+          "image": "./assets/images/logo_mobile_300.png",
+          "imageWidth": 100,
+          "backgroundColor": "#0066AE",
+          "resizeMode": "contain"
         }
-      ]
+      ],
+      "expo-font"
     ],
-    "experiments": {
-      "typedRoutes": true
-    }
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "0cfb8075-db1d-4a85-a096-b29d6d2f4aca"
+      }
+    },
+    "owner": "abunda"
   }
 }
