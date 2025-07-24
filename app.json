@@ -2,7 +2,7 @@
   "expo": {
     "name": "Sinara Pos",
     "slug": "sinara-pos",
-    "version": "0.0.2",
+    "version": "1.0.0",
     "sdkVersion": "53.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/logo_icon_mobile_300.png",

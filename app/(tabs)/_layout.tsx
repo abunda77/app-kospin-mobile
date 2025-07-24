@@ -23,21 +23,39 @@ export default function TabLayout() {
             // Use a transparent background on iOS to show the blur effect
             position: 'absolute',
           },
-          default: {},
+          default: {
+            elevation: 0,
+            borderTopWidth: 1,
+            borderTopColor: colorScheme === 'dark' ? '#333' : '#ddd',
+          },
         }),
       }}>
       <Tabs.Screen
         name="index"
         options={{
           title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          tabBarIcon: ({ color }) => <IconSymbol size={24} name="house.fill" color={color} />,
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="back"
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          title: 'Back',
+          tabBarIcon: ({ color }) => <IconSymbol size={24} name="chevron.backward" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="forward"
+        options={{
+          title: 'Forward',
+          tabBarIcon: ({ color }) => <IconSymbol size={24} name="chevron.forward" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="quit"
+        options={{
+          title: 'Quit',
+          tabBarIcon: ({ color }) => <IconSymbol size={24} name="xmark.circle" color={color} />,
         }}
       />
     </Tabs>

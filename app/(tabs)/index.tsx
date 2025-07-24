@@ -1,75 +1,106 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
-
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+import { Colors } from '@/constants/Colors';
+import { useColorScheme } from '@/hooks/useColorScheme';
+import { useRouter } from 'expo-router';
+import React, { useRef, useState } from 'react';
+import {
+  ActivityIndicator,
+  StatusBar,
+  StyleSheet
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import type { WebViewNavigation } from 'react-native-webview';
+import { WebView } from 'react-native-webview';
+
+// You can change this to any URL you want to show in the WebView
+const DEFAULT_URL = 'https://pos.kospinsinaraartha.co.id';
 
 export default function HomeScreen() {
+  const webViewRef = useRef<WebView>(null);
+  const [url, setUrl] = useState(DEFAULT_URL);
+  const [isLoading, setIsLoading] = useState(true);
+  const [canGoBack, setCanGoBack] = useState(false);
+  const [canGoForward, setCanGoForward] = useState(false);
+  const colorScheme = useColorScheme();
+  const router = useRouter();
+  const handleNavigationStateChange = (navState: WebViewNavigation) => {
+    setCanGoBack(navState.canGoBack);
+    setCanGoForward(navState.canGoForward);
+    setUrl(navState.url);
+  };
+
+  // We'll export these functions and reference states for other screens
+  React.useEffect(() => {
+    // Expose webview functions to global scope for tab navigation
+    // This is a simple way to share functionality between screens without context/redux
+    global.webViewFunctions = {
+      goBack: () => {
+        if (canGoBack && webViewRef.current) {
+          webViewRef.current.goBack();
+        }
+      },
+      goForward: () => {
+        if (canGoForward && webViewRef.current) {
+          webViewRef.current.goForward();
+        }
+      },
+      canGoBack: () => canGoBack,
+      canGoForward: () => canGoForward
+    };
+
+    return () => {
+      global.webViewFunctions = undefined;
+    };
+  }, [canGoBack, canGoForward]);
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+    <SafeAreaView style={styles.container} edges={['top']}>
+      <StatusBar barStyle={colorScheme === 'dark' ? 'light-content' : 'dark-content'} />
+      
+      {/* Loading indicator */}
+      {isLoading && (
+        <ThemedView style={styles.loadingContainer}>
+          <ActivityIndicator 
+            size="large" 
+            color={Colors[colorScheme ?? 'light'].tint} 
+          />
+        </ThemedView>
+      )}
+      
+      {/* WebView */}
+      <WebView
+        ref={webViewRef}
+        source={{ uri: url }}
+        style={styles.webview}
+        onLoadStart={() => setIsLoading(true)}
+        onLoadEnd={() => setIsLoading(false)}
+        onNavigationStateChange={handleNavigationStateChange}
+        javaScriptEnabled={true}
+        domStorageEnabled={true}
+        startInLoadingState={true}
+        scalesPageToFit={true}
+        renderLoading={() => <></>} // We handle loading state ourselves
+      />
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
+  container: {
+    flex: 1,
+    backgroundColor: 'white',
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  webview: {
+    flex: 1,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
+  loadingContainer: {
     position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    zIndex: 100,
   },
 });

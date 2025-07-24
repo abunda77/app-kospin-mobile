@@ -1,50 +1,59 @@
-# Welcome to your Expo app 👋
+# Sinara POS Expo App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Aplikasi ini adalah project [Expo React Native](https://expo.dev) untuk POS Kospin Sinara Artha, menggunakan [expo-router](https://expo.dev/router) dan WebView untuk mengakses aplikasi web POS.
 
-## Get started
+## Struktur Project
 
-1. Install dependencies
+- **app/**: Folder utama berisi file routing dan tampilan aplikasi.
+  - **_layout.tsx**: Root layout, mengatur tema dan navigasi utama.
+  - **+not-found.tsx**: Halaman fallback jika route tidak ditemukan.
+  - **(tabs)/**: Folder tab utama aplikasi.
+    - **_layout.tsx**: Layout tab, menampilkan tab Home, Back, Forward, Quit.
+    - **index.tsx**: Tab utama, menampilkan WebView ke POS Kospin Sinara Artha.
+    - **back.tsx**: Tab untuk navigasi mundur WebView.
+    - **forward.tsx**: Tab untuk navigasi maju WebView.
+    - **quit.tsx**: Tab untuk keluar dari aplikasi.
+    - **global.d.ts**: Deklarasi global untuk fungsi WebView.
 
+- **components/**: Komponen UI custom (ThemedText, ThemedView, ParallaxScrollView, dll).
+- **constants/**: Konstanta global (misal: Colors).
+- **hooks/**: Custom hooks (misal: useThemeColor, useColorScheme).
+- **assets/**: Gambar, font, dan aset statis.
+
+## Cara Menjalankan
+
+1. Install dependencies:
    ```bash
    npm install
    ```
-
-2. Start the app
-
+2. Jalankan aplikasi:
    ```bash
    npx expo start
    ```
 
-In the output, you'll find options to open the app in a
+Aplikasi akan menampilkan WebView ke POS Kospin Sinara Artha pada tab utama. Navigasi tab Back/Forward/Exit dapat digunakan untuk mengontrol WebView.
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Fitur Utama
+- WebView ke POS Kospin Sinara Artha
+- Navigasi tab: Home, Back, Forward, Quit
+- Tema otomatis (light/dark)
+- Komponen UI custom
+- File-based routing dengan expo-router
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## Reset Project
 
-## Get a fresh project
-
-When you're ready, run:
-
+Untuk memulai project baru dari blank, jalankan:
 ```bash
 npm run reset-project
 ```
+Script ini akan memindahkan kode starter ke folder **app-example** dan membuat folder **app** kosong.
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Dokumentasi & Referensi
+- [Expo documentation](https://docs.expo.dev/)
+- [expo-router](https://expo.dev/router)
+- [React Native WebView](https://github.com/react-native-webview/react-native-webview)
+- [Panduan Expo Go & Build AAB](./EXPOGO.md)
 
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## Komunitas
+- [Expo on GitHub](https://github.com/expo/expo)
+- [Discord community](https://chat.expo.dev)
