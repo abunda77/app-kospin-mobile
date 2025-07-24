@@ -5,6 +5,8 @@ import { useRouter } from 'expo-router';
 import React, { useRef, useState } from 'react';
 import {
   ActivityIndicator,
+  RefreshControl,
+  ScrollView,
   StatusBar,
   StyleSheet
 } from 'react-native';
@@ -21,14 +23,26 @@ export default function HomeScreen() {
   const [isLoading, setIsLoading] = useState(true);
   const [canGoBack, setCanGoBack] = useState(false);
   const [canGoForward, setCanGoForward] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   const colorScheme = useColorScheme();
   const router = useRouter();
+  
   const handleNavigationStateChange = (navState: WebViewNavigation) => {
     setCanGoBack(navState.canGoBack);
     setCanGoForward(navState.canGoForward);
     setUrl(navState.url);
   };
 
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    if (webViewRef.current) {
+      webViewRef.current.reload();
+    }
+    // Set refreshing to false after a short delay to show the refresh animation
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1000);
+  }, []);
   // We'll export these functions and reference states for other screens
   React.useEffect(() => {
     // Expose webview functions to global scope for tab navigation
@@ -44,14 +58,22 @@ export default function HomeScreen() {
           webViewRef.current.goForward();
         }
       },
+      reload: () => {
+        if (webViewRef.current) {
+          webViewRef.current.reload();
+          onRefresh();
+        }
+      },
       canGoBack: () => canGoBack,
-      canGoForward: () => canGoForward
+      canGoForward: () => canGoForward,
+      getCurrentUrl: () => url
     };
 
     return () => {
       global.webViewFunctions = undefined;
     };
-  }, [canGoBack, canGoForward]);
+  }, [canGoBack, canGoForward, url, onRefresh]);
+  
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
       <StatusBar barStyle={colorScheme === 'dark' ? 'light-content' : 'dark-content'} />
@@ -66,20 +88,33 @@ export default function HomeScreen() {
         </ThemedView>
       )}
       
-      {/* WebView */}
-      <WebView
-        ref={webViewRef}
-        source={{ uri: url }}
-        style={styles.webview}
-        onLoadStart={() => setIsLoading(true)}
-        onLoadEnd={() => setIsLoading(false)}
-        onNavigationStateChange={handleNavigationStateChange}
-        javaScriptEnabled={true}
-        domStorageEnabled={true}
-        startInLoadingState={true}
-        scalesPageToFit={true}
-        renderLoading={() => <></>} // We handle loading state ourselves
-      />
+      <ScrollView 
+        contentContainerStyle={styles.scrollViewContent}
+        style={styles.scrollView}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            colors={[Colors[colorScheme ?? 'light'].tint]}
+            tintColor={Colors[colorScheme ?? 'light'].tint}
+          />
+        }
+      >
+        {/* WebView */}
+        <WebView
+          ref={webViewRef}
+          source={{ uri: url }}
+          style={styles.webview}
+          onLoadStart={() => setIsLoading(true)}
+          onLoadEnd={() => setIsLoading(false)}
+          onNavigationStateChange={handleNavigationStateChange}
+          javaScriptEnabled={true}
+          domStorageEnabled={true}
+          startInLoadingState={true}
+          scalesPageToFit={true}
+          renderLoading={() => <></>} // We handle loading state ourselves
+        />
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -89,8 +124,15 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
   },
+  scrollView: {
+    flex: 1,
+  },
+  scrollViewContent: {
+    flex: 1,
+  },
   webview: {
     flex: 1,
+    height: '100%',
   },
   loadingContainer: {
     position: 'absolute',
