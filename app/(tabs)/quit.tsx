@@ -6,12 +6,16 @@ export default function QuitScreen() {
   const router = useRouter();
 
   useEffect(() => {
+    let timer: any;
+
     if (Platform.OS === 'web') {
       // On web, we can attempt to close the window
       window.close();
       
       // Fallback if window.close() doesn't work due to security restrictions
-      router.replace('/(tabs)');
+      timer = setTimeout(() => {
+        router.replace('/(tabs)');
+      }, 100);
     } else {
       // On mobile, we show an alert and attempt to exit
       Alert.alert(
@@ -20,12 +24,16 @@ export default function QuitScreen() {
         [
           {
             text: "Cancel",
-            onPress: () => router.replace('/(tabs)'),
+            onPress: () => {
+              clearTimeout(timer);
+              router.replace('/(tabs)');
+            },
             style: "cancel"
           },
           { 
             text: "OK", 
             onPress: () => {
+              clearTimeout(timer);
               // Try to exit the app on Android
               if (Platform.OS === 'android') {
                 BackHandler.exitApp();
@@ -37,16 +45,15 @@ export default function QuitScreen() {
           }
         ]
       );
+
+      // Fallback timer for mobile in case alert is dismissed unexpectedly
+      timer = setTimeout(() => {
+        router.replace('/(tabs)');
+      }, 5000); // Longer timeout for user interaction
     }
-    
-    // Just in case nothing else works, go back to home after a delay
-    const timer = setTimeout(() => {
-      router.replace('/(tabs)');
-    }, 300);
-    
+
     return () => clearTimeout(timer);
   }, [router]);
-
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Exiting application...</Text>
