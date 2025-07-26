@@ -8,12 +8,20 @@ Aplikasi ini adalah project [Expo React Native](https://expo.dev) untuk POS Kosp
   - **_layout.tsx**: Root layout, mengatur tema dan navigasi utama.
   - **+not-found.tsx**: Halaman fallback jika route tidak ditemukan.
   - **(tabs)/**: Folder tab utama aplikasi.
-    - **_layout.tsx**: Layout tab, menampilkan tab Home, Back, Forward, Quit.
+    - **_layout.tsx**: Layout tab, mengonfigurasi navigasi tab dengan ikon dan warna.
     - **index.tsx**: Tab utama, menampilkan WebView ke POS Kospin Sinara Artha.
+      - Mendukung navigasi maju/mundur
+      - Refresh halaman
+      - Deteksi status navigasi WebView
     - **back.tsx**: Tab untuk navigasi mundur WebView.
+      - Animasi putar saat kembali ke halaman sebelumnya
+      - Mendukung navigasi berdasarkan riwayat
     - **forward.tsx**: Tab untuk navigasi maju WebView.
+      - Animasi putar saat maju ke halaman berikutnya
+      - Mendukung navigasi berdasarkan riwayat
     - **quit.tsx**: Tab untuk keluar dari aplikasi.
-    - **global.d.ts**: Deklarasi global untuk fungsi WebView.
+      - Mendukung exit di Android dan Web
+      - Konfirmasi dialog sebelum keluar
 
 - **components/**: Komponen UI custom (ThemedText, ThemedView, ParallaxScrollView, dll).
 - **constants/**: Konstanta global (misal: Colors).
@@ -31,14 +39,20 @@ Aplikasi ini adalah project [Expo React Native](https://expo.dev) untuk POS Kosp
    npx expo start
    ```
 
-Aplikasi akan menampilkan WebView ke POS Kospin Sinara Artha pada tab utama. Navigasi tab Back/Forward/Exit dapat digunakan untuk mengontrol WebView.
+Aplikasi akan menampilkan WebView ke POS Kospin Sinara Artha pada tab utama. Navigasi tab memungkinkan Anda untuk:
+- Kembali ke halaman sebelumnya
+- Maju ke halaman berikutnya
+- Refresh halaman
+- Keluar dari aplikasi
 
 ## Fitur Utama
-- WebView ke POS Kospin Sinara Artha
-- Navigasi tab: Home, Back, Forward, Quit
+- WebView dinamis ke POS Kospin Sinara Artha
+- Navigasi tab dengan ikon intuitif: Home, Back, Forward, Quit
+- Manajemen riwayat navigasi WebView
 - Tema otomatis (light/dark)
 - Komponen UI custom
 - File-based routing dengan expo-router
+- Dukungan refresh dan error handling pada WebView
 
 ## Reset Project
 
