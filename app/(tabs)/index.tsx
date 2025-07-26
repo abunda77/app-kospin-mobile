@@ -15,7 +15,7 @@ import type { WebViewNavigation } from "react-native-webview";
 import { WebView } from "react-native-webview";
 
 // You can change this to any URL you want to show in the WebView
-const DEFAULT_URL = "https://pos.kospinsinaraartha.co.id/m/catalog/";
+const DEFAULT_URL = "https://pos.kospinsinaraartha.co.id/m/catalog";
 
 export default function HomeScreen() {
   const webViewRef = useRef<WebView>(null);

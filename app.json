@@ -25,7 +25,7 @@
         "foregroundImage": "./assets/images/logo_mobile_1024.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.abunda.poskospin"
+      "package": "com.abunda.appkospinpos"
     },
     "web": {
       "bundler": "metro",
@@ -50,7 +50,7 @@
         "origin": false
       },
       "eas": {
-        "projectId": "0cfb8075-db1d-4a85-a096-b29d6d2f4aca"
+        "projectId": "ee98fe35-5d73-4c74-b4b8-f229a976f269"
       }
     },
     "owner": "abunda"
